@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
     'django.contrib.sites',
-    'newsapp'
+    'newsapp',
+    'django_filters',
 ]
 
 SITE_ID = 1
@@ -131,3 +132,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+LOGIN_REDIRECT_URL = "/news"

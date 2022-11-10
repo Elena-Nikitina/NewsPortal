@@ -4,7 +4,11 @@
 Post
 {% endblock title %}
 
+
 {% block content %}
-<h1>{{ news_id }}</h1>
+{{ news_id.title }}
+{{ news_id.text|truncatechars:50 }}
+{{ news_id.dateCreation|date:'d M Y'}}
+
 
 {% endblock content %}

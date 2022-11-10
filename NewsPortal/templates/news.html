@@ -1,6 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% load custom_filters %}
+{% load custom_tags %}
 
 {% block title %}
 NEWS
@@ -9,6 +10,34 @@ NEWS
 {% block content %}
 <h1>Все новости</h1>
 <h3> {{ number_of_news|default_if_none:"Количество новостей:" }} {{ news|length }} </h3>
+
+{% block search %}
+{% endblock search %}
+
+<!--{% if categoryType == 'NW' %}-->
+<!--<a href="{ url 'news' post.id %}">-->
+<!--    {post_detail}-->
+<!--</a>-->
+<!--{% else %}-->
+<!--<a href="{ url 'article' post.id %}">-->
+<!--    {post_detail}-->
+<!--</a>-->
+<!--{% endif %}-->
+
+
+<form action="" method="get" >
+    {{ filterset.form.non_field_errors }}
+
+    {{ filterset.form.name__icontains.errors }}
+    <label for="{{ filterset.form.name__icontains.id_for_label }}">Search</label>
+    <input
+        id="{{ filterset.form.name__icontains.id }}"
+        name="{{ filterset.form.name__icontains.name }}"
+        value="{{ filterset.form.name__icontains.value }}"
+        class="form-control"
+    >
+    <input type="submit" class="mt-3 btn-primary" value="Найти" />
+</form>
 
 {% if news %}
        <table>
@@ -24,11 +53,30 @@ NEWS
             <td>{{ news.title|censor }}</td>
             <td>{{ news.dateCreation|date:'d M Y'}}</td>
             <td>{{ news.categoryType }}</td>
-            <td>{{ news.text|truncatewords:20|censor }}</td>
+            <td>{{ news.text|truncatewords:10|censor }}</td>
          </tr>
          {% endfor %}
       </table>
    {% else %}
       <h2>Новостей нет!</h2>
    {% endif %}
+
+{% if page_obj.has_previous %}
+       <a href="?{% url_replace page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+{% endif %}
+
+{{ page_obj.number }}
+
+{% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+{% endif %}
+
 {% endblock content %}

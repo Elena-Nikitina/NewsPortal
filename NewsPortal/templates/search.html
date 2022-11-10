@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+
+{% block search %}
+<h2>Поиск</h2>
+<form action="" method="get">
+  {{ filterset.form.as_p }}
+  <input type="submit" class="button button-outline" value="Search" />
+</form>
+
+
+{% endblock search %}
+
+{% endblock content %}
+
+
+
+

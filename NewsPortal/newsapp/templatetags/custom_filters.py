@@ -1,6 +1,5 @@
 from django import template
 
-
 register = template.Library()
 
 
@@ -12,14 +11,12 @@ def censor(value):
       raise TypeError(f"unresolved type '{type(value)}' expected  type 'str'")
 
    for word in value.split():
-      if word.lower() in bad_words:
+      if word.lower().strip(',') in bad_words:
          value = value.replace(word, f"{word[0]}{'*' * (len(word) - 1)}")
    return value
 
-# def censor(value):
-#    for bad_word in bad_words:
-#       value = value.replace(bad_word, '*****')
-#
-#       return f'{value}'
+
+
+
 
 
