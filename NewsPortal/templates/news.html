@@ -14,30 +14,11 @@ NEWS
 {% block search %}
 {% endblock search %}
 
-<!--{% if categoryType == 'NW' %}-->
-<!--<a href="{ url 'news' post.id %}">-->
-<!--    {post_detail}-->
-<!--</a>-->
-<!--{% else %}-->
-<!--<a href="{ url 'article' post.id %}">-->
-<!--    {post_detail}-->
-<!--</a>-->
-<!--{% endif %}-->
+<hr>
 
-
-<form action="" method="get" >
-    {{ filterset.form.non_field_errors }}
-
-    {{ filterset.form.name__icontains.errors }}
-    <label for="{{ filterset.form.name__icontains.id_for_label }}">Search</label>
-    <input
-        id="{{ filterset.form.name__icontains.id }}"
-        name="{{ filterset.form.name__icontains.name }}"
-        value="{{ filterset.form.name__icontains.value }}"
-        class="form-control"
-    >
-    <input type="submit" class="mt-3 btn-primary" value="Найти" />
-</form>
+{% if perms.newsapp.add_post %}
+    <a href="{% url 'post_create' %}">Добавить товар</a>
+    {% endif %}
 
 {% if news %}
        <table>
@@ -46,6 +27,11 @@ NEWS
                <td>Дата публикации</td>
                <td>Категория</td>
                <td>Текст</td>
+
+               {% if perms.newsapp.change_post or perms.newsapp.delete_post %}
+                <td>Действия</td>
+                {% endif %}
+
            </tr>
 
          {% for news in news %}
@@ -54,6 +40,15 @@ NEWS
             <td>{{ news.dateCreation|date:'d M Y'}}</td>
             <td>{{ news.categoryType }}</td>
             <td>{{ news.text|truncatewords:10|censor }}</td>
+
+             <td>
+                    {% if perms.newsapp.change_post %}
+                    <a href="{% url 'post_update' pk=news.id %}">Изменить</a>
+                    {% endif %}
+                    {% if perms.newsapp.delete_post %}
+                    <a href="{% url 'post_delete' news.id %}">Удалить</a>
+                    {% endif %}
+                </td>
          </tr>
          {% endfor %}
       </table>

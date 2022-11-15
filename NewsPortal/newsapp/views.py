@@ -1,9 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from datetime import datetime
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .forms import PostForm
 from .filters import PostFilter
+
 
 class PostsList(ListView):
     model = Post
@@ -38,10 +40,13 @@ class PostDetail(DetailView):
     context_object_name = 'news_id'
     pk_url_kwarg = 'id'
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_post',)
+    raise_exception = True
+    form_class = PostForm
     model = Post
     template_name = 'create.html'
-    form_class = PostForm
+
 
 
     # def form_valid(self, form):
@@ -55,19 +60,23 @@ class PostCreate(CreateView):
     #     return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('simpleapp.change_post',)
     model = Post
     template_name = 'create.html'
     form_class = PostForm
 
 
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('simpleapp.delete_post',)
     model = Post
     template_name = 'delete.html'
     success_url = reverse_lazy('post_list')
 
-
+    # def get_object(self, **kwargs):
+    #     id = self.kwargs.get('pk')
+    #     return Post.object.get(pk=id)
 
 
 class PostSearch(ListView):
@@ -88,6 +97,4 @@ class PostSearch(ListView):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
-
-
 

@@ -9,7 +9,7 @@ TEXT_MIN_LENGTH = 50
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'author', 'text']
+        fields = ['title', 'author', 'categoryType', 'postCategory', 'text']
 
     def clean(self):
         cleaned_data = super().clean()

@@ -5,9 +5,10 @@ from django_filters.widgets import RangeWidget
 
 class PostFilter(FilterSet):
     dateCreation = DateFromToRangeFilter(
-        label='dateCreation',
+        label='Date creation',
         lookup_expr='gt',
         widget=RangeWidget(attrs={'type': 'date'}))
+
 
     class Meta:
         model = Post
@@ -15,6 +16,9 @@ class PostFilter(FilterSet):
             'title': ['icontains'],
             'text': ['icontains'],
         }
+
+        # author = ModelChoiceFilter(
+        #     field_name='author'
 
 
 # from django_filters import FilterSet
